@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+set -euo pipefail
+git diff --cached --no-ext-diff --no-color --unified=0 --diff-filter=ACMR | node scripts/check-secrets.mjs --patch

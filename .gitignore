@@ -1,0 +1,16 @@
+node_modules/
+dist/
+coverage/
+web/dist/
+is/
+veri/
+.env*
+*.pem
+*.key
+*.p12
+*.pfx
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

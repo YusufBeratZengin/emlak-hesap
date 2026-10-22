@@ -1,0 +1,37 @@
+{
+  "name": "emlak-hesap",
+  "version": "0.1.0",
+  "description": "Transparent housing investment and cost calculations for Türkiye, in integer kuruş.",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "license": "MIT",
+  "sideEffects": false,
+  "files": ["dist", "README.md", "README.tr.md", "LICENSE", "CHANGELOG.md"],
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
+    "./presets/tr-2026": { "types": "./dist/presets/tr-2026.d.ts", "import": "./dist/presets/tr-2026.js" }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "build:web": "node scripts/build-web.mjs",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:smoke": "npm run build && node tests/node-smoke.test.mjs",
+    "check:secrets": "node scripts/check-secrets.mjs",
+    "check": "npm run typecheck && npm run lint && npm run test:coverage && npm run build && npm run build:web && npm run check:secrets",
+    "prepack": "npm run build"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.0",
+    "@types/node": "^22.18.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "esbuild": "^0.25.11",
+    "eslint": "^9.39.0",
+    "jsdom": "^26.1.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.1",
+    "vitest": "^3.2.4"
+  }
+}
