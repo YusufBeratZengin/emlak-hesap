@@ -43,7 +43,10 @@ export function parseField(value: string, kind: FieldKind): number {
   if (!Number.isFinite(numeric) || (kind === 'integer' && !Number.isInteger(numeric))) {
     throw new RangeError('Enter a finite number in the required format.');
   }
-  return kind === 'percent' ? numeric / 100 : numeric;
+  if (kind !== 'percent') return numeric;
+  // Shift the decimal point textually: numeric / 100 gives 0.006999999999999999 for "0.7".
+  const [whole = '0', decimals = ''] = value.split('.');
+  return Number(`${whole}${decimals}e-${decimals.length + 2}`);
 }
 
 /** Preserve every kuruş even near MAX_SAFE_INTEGER, where amount / 100 can lose a cent. */

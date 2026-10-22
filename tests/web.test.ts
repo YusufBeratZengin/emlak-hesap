@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it } from 'vitest';
 import { mountApp } from '../web/src/main.js';
+import { multiply } from '../src/internal.js';
 import { calculators, formatMoney, parseField, parseMoney } from '../web/src/forms.js';
 import en from '../web/locales/en.json' with { type: 'json' };
 import tr from '../web/locales/tr.json' with { type: 'json' };
@@ -40,6 +41,14 @@ describe('form parsing', () => {
     for (const invalid of ['-1', '', '1e3', 'Infinity']) expect(() => parseField(invalid, 'percent')).toThrow();
     expect(() => parseField('1.5', 'integer')).toThrow();
     expect(() => parseField('9'.repeat(400), 'area')).toThrow();
+  });
+
+  it('converts percent text by decimal shift, not binary division', () => {
+    for (const [text, expected] of [['0.7', 0.007], ['0.35', 0.0035], ['1.4', 0.014], ['1.384', 0.01384], ['100', 1], ['0', 0]] as const) {
+      expect(parseField(text, 'percent')).toBe(expected);
+    }
+    // 0.7% of 5.00 TL is 3.5 kuruş and must round half away to 4.
+    expect(multiply(500, parseField('0.7', 'percent'))).toBe(4);
   });
 
   it('formats signed kuruş exactly, including the maximum safe amount', () => {
