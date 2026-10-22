@@ -1,22 +1,60 @@
 # emlak-hesap
 
-Türkiye'de konut yatırımı ve alım giderlerini hesaplayan, çalışma zamanı bağımlılığı olmayan TypeScript kütüphanesi ve iki dilli statik hesaplayıcı.
+[![CI](https://github.com/YusufBeratZengin/emlak-hesap/actions/workflows/ci.yml/badge.svg)](https://github.com/YusufBeratZengin/emlak-hesap/actions/workflows/ci.yml) [![npm](https://img.shields.io/npm/v/emlak-hesap)](https://www.npmjs.com/package/emlak-hesap) [![MIT](https://img.shields.io/github/license/YusufBeratZengin/emlak-hesap)](LICENSE) [![Node.js](https://img.shields.io/node/v/emlak-hesap)](package.json) [![Runtime dependencies](https://img.shields.io/badge/runtime%20dependencies-0-brightgreen)](package.json)
 
-[![CI: test + lint](.github/badges/ci.svg)](.github/workflows/ci.yml)
-[![MIT lisansı](.github/badges/license.svg)](LICENSE)
+[English](README.md) · Türkçe · ESM · Node.js 20+
 
-[English](README.md) · Sürüm 0.1.0 · ESM · Node.js 20+
+Türkiye'de konut yatırımı ve alım giderleri için TypeScript kütüphanesi ve Türkçe/İngilizce tarayıcı hesaplayıcısı.
+Tam sayı kuruşla hesap yapar; tarihli referans oranları açıkça seçilir, çalışma zamanı bağımlılığı yoktur.
+[Canlı demo](https://yusufberatzengin.github.io/emlak-hesap/) · İlk npm yayını sonrasında kurulum: `npm install emlak-hesap`.
+Yerel kopyada deneyin: `npm run build && node examples/rental-yield.mjs`.
+
+## Demo
+
+Yedi hesaplama sekmesini [tarayıcıda deneyin](https://yusufberatzengin.github.io/emlak-hesap/). Veriler yalnızca bellekte tutulur. Demo, deponun GitHub Pages yayını etkin olduğunda erişilebilir.
+
+### Örnek çıktı
+
+`node examples/rental-yield.mjs` ile `netRentalYield` fonksiyonundan alınan gerçek konsol çıktısı (hayalî senaryo; tutarlar kuruş):
+
+```json
+{
+  "propertyPriceKurus": 100000000,
+  "annualRentKurus": 6000000,
+  "grossYield": 0.06,
+  "vacancyLossKurus": 600000,
+  "collectedRentKurus": 5400000,
+  "annualDuesKurus": 120000,
+  "annualPropertyTaxKurus": 20000,
+  "annualMaintenanceKurus": 30000,
+  "annualInsuranceKurus": 10000,
+  "annualExpensesKurus": 180000,
+  "netAnnualIncomeKurus": 5220000,
+  "netYield": 0.0522
+}
+```
 
 ## Kurulum
 
-Bu depodan kurmak için (npm'de yayımlandığı varsayılmaz):
+İlk npm yayını sonrasında:
 
 ```sh
-npm install
-npm run build
+npm install emlak-hesap
 ```
 
-Başka bir projede yerel kopyayı kullanmak için derlemeden sonra `npm install /path/to/emlak-hesap` çalıştırın. Paket adı `emlak-hesap`; yayımlama ayrı bir adımdır. Çalışma zamanı bağımlılığı yoktur. Kütüphane ve hesaplayıcı ağ çağrısı yapmaz; analitik, uzaktan yüklenen yazı tipi veya kaydedilen mali girdi içermez. Kaynak bağlantıları yalnızca tıklandığında açılır.
+İlk yayın tamamlanmadan npm sürüm rozeti ve paket kurulumu kullanılamayabilir. Kaynaktan çalışmak için depoyu indirin, ardından:
+
+```sh
+npm ci --ignore-scripts
+npm run build
+npm run examples
+```
+
+Paket ESM biçimindedir ve Node.js 20+ gerektirir. Çalışma zamanı bağımlılığı yoktur. Kütüphane ve hesaplayıcı ağ çağrısı yapmaz; analitik, uzaktan yüklenen yazı tipi veya kaydedilen mali girdi içermez. Kaynak bağlantıları yalnızca tıklandığında açılır.
+
+## Örnekler
+
+Derlenmiş paket içe aktarımlarını kullanan [kira getirisi](examples/rental-yield.mjs), [kredi](examples/mortgage.mjs) ve [alım gideri](examples/purchase-cost.mjs) örneklerini `npm run examples` ile çalıştırın. Tümü hayalî girdilerle her çalıştırmada aynı çıktıyı üretir ve `npm run test:smoke` kapsamındadır.
 
 ## Hızlı örnek
 
@@ -102,6 +140,8 @@ Framework kullanmayan arayüzde tüm hesapları kapsayan yedi sekme, Türkçe/İ
 - `rentVsBuy`, peşin alımı, sabit kirayı ve değerini koruyan konutu esas alır. Alımın ekonomik maliyeti = başlangıç giderleri + yıllık mülkiyet giderleri × yıl + `(fiyat + başlangıç giderleri) × fırsat maliyeti oranı`, yıllık kuruşa yuvarlanarak, × yıl. Konut elde tutulduğu için fiyatın tamamı kayıp sayılmaz. Kredi, değer artışı, kira artışı, bileşik getiri, satış giderleri ve kapsamlı portföy hesabı dahil değildir. Pozitif `rentMinusBuyKurus`, bu varsayımlarla alımın daha düşük maliyetli olduğunu gösterir.
 - Fisher hesabındaki oranlar aynı döneme ait olmalıdır. Alan karşılaştırmalarında net/brüt tanımı tutarlı olmalı; bölge ortalamasını kullanıcı sağlamalıdır. Piyasa verisi alınmaz.
 
+[Resmî kaynakları doğrulama ve oran güncelleme kontrol listesi](docs/rates-update.md) bakım sürecini açıklar; testler referans tarihinden 18 takvim ayı sonra başarısız olur. Bu kontrol, oranların hukuken doğru olduğunu garanti etmez.
+
 ### Tarihli Türkiye referans seti
 
 [`src/presets/tr-2026.ts`](src/presets/tr-2026.ts), **22.10.2026 tarihli ve açıkça seçilerek kullanılan bir referans setidir; oranlar değişebilir, doğrulanmalıdır**. Taraf başına %2 tapu harcı, KDV hariç toplam %4 hizmet bedeli üst sınırı, yarı yarıya paylaşım varsayımı ve hizmet bedeli senaryosu için %20 genel KDV içerir. Üst sınır zorunlu ücret değildir. Sabit giderler ücretsiz oldukları için değil, teklif gerektirdikleri için sıfırdır. Kaynaklar kod yorumlarında da bulunur:
@@ -114,9 +154,11 @@ Framework kullanmayan arayüzde tüm hesapları kapsayan yedi sekme, Türkçe/İ
 
 ```sh
 npm run check          # strict tip kontrolü, ESLint, Vitest + kapsama, iki derleme, sır taraması
-npm run test:smoke     # derlenmiş paket; yalnızca Node'un yerleşik test/assert modülleriyle kontrol
+npm run test:smoke     # derlenmiş paket testleri ve çalıştırılabilir örnekler
 ```
 
-Vitest testleri elle hesabı açıklanan örnekleri, her fonksiyonun geçersiz girdilerini, yuvarlamayı, sınırları, ödeme tablosunun tutarlılığını ve iki dilli DOM arayüzünü kapsar. Kapsama raporu HTML ve LCOV olarak `coverage/` altına yazılır. Kütüphane eşikleri: satır/ifade %95, fonksiyon %100, dal %90. [CI iş akışı](.github/workflows/ci.yml) Node 20, 22 ve 24 üzerinde çalışır. Yukarıdaki CI rozeti bu iş akışını gösterir; güncel testlerin geçtiği iddiası değildir.
+Vitest testleri elle hesabı açıklanan örnekleri, her fonksiyonun geçersiz girdilerini, yuvarlamayı, sınırları, ödeme tablosunun tutarlılığını ve iki dilli DOM arayüzünü kapsar. Kapsama raporu HTML ve LCOV olarak `coverage/` altına yazılır. Kütüphane eşikleri: satır/ifade %95, fonksiyon %100, dal %90. [CI iş akışı](.github/workflows/ci.yml) Ubuntu’da Node 20, 22 ve 24, Windows’ta Node 22 üzerinde çalışır. CI rozeti güncel iş akışı durumunu gösterir.
 
 İş akışı, gizlilik kuralları ve commit öncesi sır taraması için [CONTRIBUTING.md](CONTRIBUTING.md), sürüm notları için [CHANGELOG.md](CHANGELOG.md) dosyasına bakın. MIT lisansı [LICENSE](LICENSE) içindedir.
+
+Güvenlik açıkları için [özel bildirim politikasını](SECURITY.md), topluluk katılımı için [davranış kurallarını](CODE_OF_CONDUCT.md) okuyun. Yayın süreci CONTRIBUTING.md dosyasındaki “Releasing” bölümündedir.

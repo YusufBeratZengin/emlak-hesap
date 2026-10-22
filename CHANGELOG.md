@@ -1,5 +1,22 @@
 # Changelog
 
+All notable changes are documented here, following [Keep a Changelog 1.1](https://keepachangelog.com/en/1.1.0/) and [Semantic Versioning](https://semver.org/).
+
+## [Unreleased]
+
+### Added
+
+- npm publication metadata, tag-triggered OIDC release workflow and documented release procedure.
+- Community reporting forms, security policy, Contributor Covenant 2.1 and weekly dependency updates.
+- Live demo links, a calculator screenshot, runnable compiled-package examples and advisory packaging checks.
+- An 18-month preset freshness guard and official-source verification checklist.
+
+### Changed
+
+- CI uses the lockfile, npm caching, cancellation of superseded runs and Ubuntu Node 20/22/24 plus Windows Node 22.
+- Live README badges replace static artwork; both languages document sample output and publication prerequisites.
+- Web result regions announce updates and all number inputs request a decimal keyboard; DOM tests verify these attributes, tab focus and language changes.
+
 ## 0.1.0 — 2026-10-22
 
 ### Added
@@ -11,6 +28,6 @@
 - Numerical, validation, boundary, rounding and DOM tests; Vitest coverage configuration; dependency-free compiled-package smoke checks.
 - English/Turkish documentation, MIT license, staged secret-scan hook, CI matrix and a main-push-only GitHub Pages workflow.
 
-### Validation note
+### Validation
 
-The initial development environment blocked npm installation (`ENOTCACHED`). Vitest, ESLint, coverage and the esbuild web build require dependency installation before their results can be verified. See the delivery report for checks actually executed; configured coverage thresholds are not a measured coverage claim.
+The 0.1.0 baseline passed 75 tests with measured library coverage of 100% statements and 100% branches. Type checking, lint, both builds, compiled-package smoke checks and the secret scan also passed. These are measured baseline results, not a claim that a hosted workflow has run; subsequent changes are checked separately.

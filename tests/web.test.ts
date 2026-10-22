@@ -72,6 +72,7 @@ describe('calculator UI', () => {
       tab(name);
       for (const input of document.querySelectorAll<HTMLInputElement>('input')) {
         expect(document.querySelector(`label[for="${input.id}"]`)?.textContent).toBeTruthy();
+        expect(input.getAttribute('inputmode')).toBe('decimal');
       }
     }
   });
@@ -87,6 +88,8 @@ describe('calculator UI', () => {
         submit();
         expect(query('.error').textContent, `${language}/${name}`).toBe('');
         expect(query('.output dd').textContent).toBeTruthy();
+        expect(query('.result-area').getAttribute('aria-live')).toBe('polite');
+        expect(query('[role="status"]').getAttribute('aria-live')).toBe('polite');
         expect(query('.output').textContent).not.toMatch(/NaN|undefined|Infinity/);
       }
     }
@@ -106,6 +109,10 @@ describe('calculator UI', () => {
     language.value = 'en'; language.dispatchEvent(new Event('change'));
     expect(query<HTMLInputElement>('[name="monthlyRentKurus"]').value).toBe('1234.56');
     expect(query('.output').textContent).toContain('Gross rental yield');
+    const switched = query<HTMLSelectElement>('#language');
+    switched.value = 'tr'; switched.dispatchEvent(new Event('change'));
+    expect(document.documentElement.lang).toBe('tr');
+    expect(query('.output').textContent).toContain(tr.outputs.grossYield);
   });
 
   it('shows inline errors and focuses the invalid field', () => {
@@ -144,8 +151,19 @@ describe('calculator UI', () => {
   });
 
   it('supports tab keyboard navigation and the theme toggle', () => {
-    const press = (key: string) => query<HTMLElement>('[role="tab"][aria-selected="true"]')
-      .dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true }));
+    const press = (key: string) => {
+      const event = new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true });
+      query<HTMLElement>('[role="tab"][aria-selected="true"]').dispatchEvent(event);
+      expect(event.defaultPrevented).toBe(true);
+      const selected = query<HTMLElement>('[role="tab"][aria-selected="true"]');
+      expect(document.activeElement).toBe(selected);
+      expect(selected.tabIndex).toBe(0);
+      expect(document.querySelectorAll('[role="tab"][tabindex="0"]')).toHaveLength(1);
+      expect(query('[role="tabpanel"]').getAttribute('aria-labelledby')).toBe(selected.id);
+      for (const inactive of document.querySelectorAll<HTMLElement>('[role="tab"][aria-selected="false"]')) {
+        expect(inactive.tabIndex).toBe(-1);
+      }
+    };
     press('ArrowRight'); expect(document.activeElement?.id).toBe('tab-payback');
     press('End'); expect(document.activeElement?.id).toBe('tab-rentBuy');
     press('ArrowRight'); expect(document.activeElement?.id).toBe('tab-rental');

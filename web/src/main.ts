@@ -161,7 +161,7 @@ export function mountApp(root: HTMLElement): void {
       input.type = 'number';
       input.required = true;
       input.autocomplete = 'off';
-      input.inputMode = field.kind === 'integer' ? 'numeric' : 'decimal';
+      input.inputMode = 'decimal';
       input.min = ['propertyPriceKurus', 'investmentKurus', 'principalKurus', 'deedFeeBaseKurus', 'regionalAverageKurus'].includes(field.key)
         ? '0.01' : field.kind === 'integer' ? '1' : field.kind === 'area' ? '0.000001' : '0';
       input.step = field.kind === 'integer' ? '1' : field.kind === 'money' ? '0.01' : 'any';
@@ -213,6 +213,7 @@ export function mountApp(root: HTMLElement): void {
     const resultTitle = element('h2', t.results);
     resultTitle.id = 'results-title';
     resultArea.setAttribute('aria-labelledby', resultTitle.id);
+    resultArea.setAttribute('aria-live', 'polite');
     const output = element('div', undefined, `output${state.dirty ? ' is-stale' : ''}`);
 
     function formatted(key: string, value: unknown): string {

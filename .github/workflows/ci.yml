@@ -2,30 +2,60 @@ name: CI
 
 on:
   push:
+    branches: [main]
   pull_request:
 
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check:
-    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        node: [20, 22, 24]
+        include:
+          - { os: ubuntu-latest, node: 20 }
+          - { os: ubuntu-latest, node: 22 }
+          - { os: ubuntu-latest, node: 24 }
+          - { os: windows-latest, node: 22 }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-      - run: npm install --ignore-scripts --no-audit --no-fund
+          cache: npm
+      - run: npm ci --ignore-scripts
       - run: npm run check
       - run: npm run test:smoke
       - run: npm pack --dry-run --ignore-scripts
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: coverage-node-${{ matrix.node }}
+          name: coverage-${{ matrix.os }}-node-${{ matrix.node }}
           path: coverage/
           if-no-files-found: ignore
+  packaging:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run build
+      - name: Check package exports (advisory)
+        continue-on-error: true
+        run: npx --yes publint
+      - name: Check published types (advisory)
+        continue-on-error: true
+        run: npx --yes @arethetypeswrong/cli --pack

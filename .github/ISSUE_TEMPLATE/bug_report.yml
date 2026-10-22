@@ -1,0 +1,46 @@
+name: Bug report
+description: Report a reproducible calculation or calculator problem using fictional inputs.
+title: 'bug: '
+body:
+  - type: checkboxes
+    id: searched
+    attributes:
+      label: Before reporting
+      options:
+        - label: I searched existing issues.
+          required: true
+        - label: This report contains only fictional data and no secrets.
+          required: true
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Operating system and Node.js version
+      description: Include browser and version for web calculator issues.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Provide a minimal example with fictional amounts, units and rates.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected versus actual behavior
+      description: For calculation issues, show the expected arithmetic and rounding.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Remove all personal data, local paths and credentials before sharing.
+      render: text

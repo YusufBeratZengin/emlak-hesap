@@ -1,22 +1,60 @@
 # emlak-hesap
 
-A dependency-free TypeScript library and bilingual static calculator for housing investment and purchase costs in Türkiye.
+[![CI](https://github.com/YusufBeratZengin/emlak-hesap/actions/workflows/ci.yml/badge.svg)](https://github.com/YusufBeratZengin/emlak-hesap/actions/workflows/ci.yml) [![npm](https://img.shields.io/npm/v/emlak-hesap)](https://www.npmjs.com/package/emlak-hesap) [![MIT](https://img.shields.io/github/license/YusufBeratZengin/emlak-hesap)](LICENSE) [![Node.js](https://img.shields.io/node/v/emlak-hesap)](package.json) [![Runtime dependencies](https://img.shields.io/badge/runtime%20dependencies-0-brightgreen)](package.json)
 
-[![CI: test + lint](.github/badges/ci.svg)](.github/workflows/ci.yml)
-[![MIT license](.github/badges/license.svg)](LICENSE)
+English · [Türkçe](README.tr.md) · ESM · Node.js 20+
 
-[Türkçe](README.tr.md) · Version 0.1.0 · ESM · Node.js 20+
+A TypeScript library and English/Turkish browser calculator for housing investment and purchase costs in Türkiye.
+Uses integer kuruş, dated opt-in reference presets and zero runtime dependencies.
+[Live demo](https://yusufberatzengin.github.io/emlak-hesap/) · After the first npm release, install with `npm install emlak-hesap`.
+Try a checkout: `npm run build && node examples/rental-yield.mjs`.
+
+## Demo
+
+Try all seven calculation tabs in the [browser calculator](https://yusufberatzengin.github.io/emlak-hesap/). Inputs stay in memory. The demo is available once GitHub Pages deployment is enabled for this repository.
+
+### Sample output
+
+Actual console output from `netRentalYield` via `node examples/rental-yield.mjs` (fictional scenario; amounts in kuruş):
+
+```json
+{
+  "propertyPriceKurus": 100000000,
+  "annualRentKurus": 6000000,
+  "grossYield": 0.06,
+  "vacancyLossKurus": 600000,
+  "collectedRentKurus": 5400000,
+  "annualDuesKurus": 120000,
+  "annualPropertyTaxKurus": 20000,
+  "annualMaintenanceKurus": 30000,
+  "annualInsuranceKurus": 10000,
+  "annualExpensesKurus": 180000,
+  "netAnnualIncomeKurus": 5220000,
+  "netYield": 0.0522
+}
+```
 
 ## Installation
 
-From this repository (no npm release is assumed):
+After the first npm publication:
 
 ```sh
-npm install
-npm run build
+npm install emlak-hesap
 ```
 
-To consume a local checkout in another project, run `npm install /path/to/emlak-hesap` after building it. The package name is `emlak-hesap`; publishing is a separate step. Runtime dependencies: none. There are no network calls in the library or calculator, analytics, remote fonts, or saved financial inputs. Source links open only when followed.
+The npm version badge and registry install may be unavailable before the first release. To work from source, obtain a checkout and run:
+
+```sh
+npm ci --ignore-scripts
+npm run build
+npm run examples
+```
+
+The package is ESM and requires Node.js 20+. Runtime dependencies: none. There are no network calls in the library or calculator, analytics, remote fonts, or saved financial inputs. Source links open only when followed.
+
+## Examples
+
+Run `npm run examples` for [rental yield](examples/rental-yield.mjs), [mortgage](examples/mortgage.mjs) and [purchase costs](examples/purchase-cost.mjs). They import the built package, use fictional inputs, print deterministic results and also run under `npm run test:smoke`.
 
 ## Quick example
 
@@ -102,6 +140,8 @@ The [Pages workflow](.github/workflows/pages.yml) runs **only on pushes to `main
 - `rentVsBuy` models an all-cash purchase with constant rent and retained home value. Buying economic cost = upfront fees + annual ownership costs × years + `(price + upfront fees) × opportunity rate`, rounded annually, × years. The home price is not treated as a loss because the asset is retained. No loan, appreciation, rent growth, compounding, sale costs or full portfolio simulation is included. Positive `rentMinusBuyKurus` means buying has the lower modeled cost.
 - Fisher rates must cover the same period. Area comparisons require consistent net/gross area definitions and a user-supplied regional estimate; no market data is fetched.
 
+Follow the [official-source verification and rate update checklist](docs/rates-update.md); tests fail after 18 calendar months without a new review. Freshness does not guarantee legal correctness.
+
 ### Dated Turkish reference preset
 
 [`src/presets/tr-2026.ts`](src/presets/tr-2026.ts) is an **opt-in reference snapshot dated 2026-10-22; rates may change and must be verified**. It uses 2% deed fees per party, the 4% total brokerage ceiling before VAT, a 50/50 allocation assumption and 20% general VAT for the brokerage scenario. The ceiling is not a mandatory fee. Fixed charges are zero because a quote is required, not because they are free. The preset includes source comments:
@@ -114,9 +154,11 @@ The [Pages workflow](.github/workflows/pages.yml) runs **only on pushes to `main
 
 ```sh
 npm run check          # strict types, ESLint, Vitest + coverage, both builds, secret scan
-npm run test:smoke     # compiled package checks using only Node's built-in test/assert modules
+npm run test:smoke     # compiled package tests and runnable examples
 ```
 
-Vitest checks hand-calculated examples, every public function's invalid inputs, rounding, boundaries, schedule reconciliation and the bilingual DOM interface. Coverage is written to `coverage/` (HTML and LCOV); enforced library thresholds: 95% lines/statements, 100% functions, 90% branches. The [CI workflow](.github/workflows/ci.yml) tests Node 20, 22 and 24. The CI badge above identifies that workflow; it is not a live passing-status claim.
+Vitest checks hand-calculated examples, every public function's invalid inputs, rounding, boundaries, schedule reconciliation and the bilingual DOM interface. Coverage is written to `coverage/` (HTML and LCOV); enforced library thresholds: 95% lines/statements, 100% functions, 90% branches. The [CI workflow](.github/workflows/ci.yml) tests Ubuntu with Node 20, 22 and 24 and Windows with Node 22. The CI badge shows the live workflow status.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow, privacy rules and pre-commit secret scan, and [CHANGELOG.md](CHANGELOG.md) for release notes. The MIT license is in [LICENSE](LICENSE).
+
+Read the [private security reporting policy](SECURITY.md) and [code of conduct](CODE_OF_CONDUCT.md). Release steps are in the “Releasing” section of CONTRIBUTING.md.

@@ -5,6 +5,19 @@ import {
 } from '../src/index.js';
 import { tr2026 } from '../src/presets/tr-2026.js';
 
+// Review policy, not a legal rate: fail after 18 calendar months using the real UTC clock.
+// Re-verify official sources before updating asOf; never move the clock to hide stale rates.
+const PRESET_MAX_AGE_MONTHS = 18;
+
+it('keeps the opt-in preset within the documented freshness window', () => {
+  const snapshot = new Date(`${tr2026.asOf}T00:00:00Z`);
+  const expires = new Date(snapshot);
+  expires.setUTCMonth(expires.getUTCMonth() + PRESET_MAX_AGE_MONTHS);
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+  expect(today.getTime(), 'Preset is older than 18 months; follow docs/rates-update.md').toBeLessThanOrEqual(expires.getTime());
+});
+
 // All figures are synthetic arithmetic fixtures; no people or properties are represented.
 const rental = { propertyPriceKurus: 100_000_000, monthlyRentKurus: 500_000 };
 const net = { ...rental, monthlyDuesKurus: 10_000, annualPropertyTaxKurus: 20_000,
