@@ -36,8 +36,10 @@ export function parseMoney(value: string): number {
   return amount;
 }
 
-export function parseField(value: string, kind: FieldKind): number {
-  if (kind === 'money') return parseMoney(value);
+export function parseField(rawValue: string, kind: FieldKind): number {
+  if (kind === 'money') return parseMoney(rawValue);
+  // Turkish users type a decimal comma, as the money fields already allow.
+  const value = /^\d+,\d+$/.test(rawValue) ? rawValue.replace(',', '.') : rawValue;
   if (!/^\d+(?:\.\d+)?$/.test(value)) throw new RangeError('Enter a non-negative number.');
   const numeric = Number(value);
   if (!Number.isFinite(numeric) || (kind === 'integer' && !Number.isInteger(numeric))) {

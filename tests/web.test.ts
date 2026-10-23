@@ -43,6 +43,13 @@ describe('form parsing', () => {
     expect(() => parseField('9'.repeat(400), 'area')).toThrow();
   });
 
+  it('accepts a decimal comma in percent and area fields like money fields do', () => {
+    expect(parseField('2,5', 'percent')).toBe(0.025);
+    expect(parseField('1,5', 'area')).toBe(1.5);
+    expect(() => parseField('1,000.5', 'area')).toThrow();
+    expect(() => parseField('1,5', 'integer')).toThrow();
+  });
+
   it('converts percent text by decimal shift, not binary division', () => {
     for (const [text, expected] of [['0.7', 0.007], ['0.35', 0.0035], ['1.4', 0.014], ['1.384', 0.01384], ['100', 1], ['0', 0]] as const) {
       expect(parseField(text, 'percent')).toBe(expected);
