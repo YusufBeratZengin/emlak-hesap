@@ -30,7 +30,7 @@ Legal and tax rates belong only in dated `src/presets/` modules, never in calcul
 
 Follow the [rate verification checklist](docs/rates-update.md). The freshness test allows at most 18 calendar months after the preset's verified date; advancing the date requires checking sources again.
 
-CI runs on Ubuntu with Node 20, 22 and 24 and Windows with Node 22. The Pages workflow runs only after a push to `main`; changing documentation or opening a PR does not deploy a site. Do not include credentials in workflow files or client code.
+CI runs on Ubuntu with Node 20, 22 and 24 and Windows with Node 22 and 24. It prints coverage and uploads HTML/LCOV reports. After changing the rental-yield example, run `npm run demo` to refresh `docs/demo.svg`; CI verifies the image against the real output. The Pages workflow runs only after a push to `main`; changing documentation or opening a PR does not deploy a site. Do not include credentials in workflow files or client code.
 
 ## Releasing
 

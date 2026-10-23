@@ -10,14 +10,18 @@ All notable changes are documented here, following [Keep a Changelog 1.1](https:
 - Community reporting forms, security policy, Contributor Covenant 2.1 and weekly dependency updates.
 - Live demo links, a calculator screenshot, runnable compiled-package examples and advisory packaging checks.
 - An 18-month preset freshness guard and official-source verification checklist.
+- A reproducible terminal demo generated from the runnable rental-yield example, with a CI freshness check.
+- Weekly JavaScript/TypeScript CodeQL analysis on the public repository.
 
 ### Changed
 
-- CI uses the lockfile, npm caching, cancellation of superseded runs and Ubuntu Node 20/22/24 plus Windows Node 22.
+- CI uses the lockfile, npm caching, cancellation of superseded runs and Ubuntu Node 20/22/24 plus Windows Node 22/24.
 - Live README badges replace static artwork; both languages document sample output and publication prerequisites.
+- Both READMEs now share quick start, configuration, FAQ, contribution and license sections; the runtime badge works before npm publication.
+- The default test command prints coverage using the existing V8 provider and enforced library thresholds.
 - Web result regions announce updates and all number inputs request a decimal keyboard; DOM tests verify these attributes, tab focus and language changes.
 
-## 0.1.0 — 2026-10-22
+## [0.1.0] - 2026-10-23
 
 ### Added
 

@@ -1,17 +1,34 @@
 # emlak-hesap
 
-[![CI](https://github.com/YusufBeratZengin/emlak-hesap/actions/workflows/ci.yml/badge.svg)](https://github.com/YusufBeratZengin/emlak-hesap/actions/workflows/ci.yml) [![npm](https://img.shields.io/npm/v/emlak-hesap)](https://www.npmjs.com/package/emlak-hesap) [![MIT](https://img.shields.io/github/license/YusufBeratZengin/emlak-hesap)](LICENSE) [![Node.js](https://img.shields.io/node/v/emlak-hesap)](package.json) [![Runtime dependencies](https://img.shields.io/badge/runtime%20dependencies-0-brightgreen)](package.json)
+[![CI](https://github.com/YusufBeratZengin/emlak-hesap/actions/workflows/ci.yml/badge.svg)](https://github.com/YusufBeratZengin/emlak-hesap/actions/workflows/ci.yml) [![npm](https://img.shields.io/npm/v/emlak-hesap)](https://www.npmjs.com/package/emlak-hesap) [![MIT](https://img.shields.io/github/license/YusufBeratZengin/emlak-hesap)](LICENSE) [![Node.js 20+](https://img.shields.io/badge/node-%3E%3D20-417e38)](package.json) [![Runtime dependencies](https://img.shields.io/badge/runtime%20dependencies-0-brightgreen)](package.json)
 
 English · [Türkçe](README.tr.md) · ESM · Node.js 20+
 
 A TypeScript library and English/Turkish browser calculator for housing investment and purchase costs in Türkiye.
-Uses integer kuruş, dated opt-in reference presets and zero runtime dependencies.
-[Live demo](https://yusufberatzengin.github.io/emlak-hesap/) · After the first npm release, install with `npm install emlak-hesap`.
-Try a checkout: `npm run build && node examples/rental-yield.mjs`.
+
+![Terminal showing the rental-yield example and its actual JSON output, using fictional amounts in kuruş](docs/demo.svg)
+
+## Why emlak-hesap?
+
+- **Traceable money calculations:** integer kuruş, explicit rounding and itemized results that reconcile with payment schedules.
+- **Visible assumptions:** pure typed functions, explicit fee inputs and dated reference presets you opt into.
+- **Local by design:** zero runtime dependencies, no network calls and an English/Turkish browser calculator that keeps inputs in memory.
+
+## Quick start
+
+With Node.js 20+ and npm, start from a checkout of this repository:
+
+```sh
+npm ci --ignore-scripts
+npm run build
+node examples/rental-yield.mjs
+```
+
+The last command prints the JSON shown above: `grossYield: 0.06` (6%) and `netYield: 0.0522` (5.22%). Run `npm run examples` for all three examples. To regenerate the image from real console output, run `npm run demo`; CI checks that it stays current.
 
 ## Demo
 
-Try all seven calculation tabs in the [browser calculator](https://yusufberatzengin.github.io/emlak-hesap/). Inputs stay in memory. The demo is available once GitHub Pages deployment is enabled for this repository.
+Try all seven calculation tabs in the [browser calculator](https://YusufBeratZengin.github.io/emlak-hesap/). Inputs stay in memory. The demo is available once GitHub Pages deployment is enabled for this repository.
 
 ### Sample output
 
@@ -42,21 +59,15 @@ After the first npm publication:
 npm install emlak-hesap
 ```
 
-The npm version badge and registry install may be unavailable before the first release. To work from source, obtain a checkout and run:
-
-```sh
-npm ci --ignore-scripts
-npm run build
-npm run examples
-```
+The npm version badge and registry install may be unavailable before the first release. Until then, use the checkout commands in [Quick start](#quick-start).
 
 The package is ESM and requires Node.js 20+. Runtime dependencies: none. There are no network calls in the library or calculator, analytics, remote fonts, or saved financial inputs. Source links open only when followed.
 
-## Examples
+## Usage examples
 
 Run `npm run examples` for [rental yield](examples/rental-yield.mjs), [mortgage](examples/mortgage.mjs) and [purchase costs](examples/purchase-cost.mjs). They import the built package, use fictional inputs, print deterministic results and also run under `npm run test:smoke`.
 
-## Quick example
+### Library example
 
 ```ts
 import { grossRentalYield, mortgage, purchaseCost } from 'emlak-hesap';
@@ -108,6 +119,10 @@ Every function is pure, accepts one object, returns an itemized object, and leav
 
 See [source and exported interfaces](src/index.ts) and [worked numerical tests](tests/calculations.test.ts). Mortgage rows include opening balance, payment, principal, interest, BSMV, KKDF and closing balance, all in kuruş.
 
+## Configuration
+
+There are no environment variables, credentials or configuration files. Pass amounts and rates directly to each function. The optional `tr2026` preset is imported separately and never applied automatically; override its fields explicitly for your scenario. In the browser, choose the language and theme and edit the form inputs.
+
 ### Money and validation
 
 - Pass non-negative safe-integer kuruş amounts; fractional TL must be converted before calling the library. Prices, principal, investment, deed fee base, area and regional average must be positive.
@@ -129,7 +144,17 @@ The framework-free interface includes seven tabs covering all calculations, Engl
 
 The [Pages workflow](.github/workflows/pages.yml) runs **only on pushes to `main`**, checks the project, then deploys `web/dist`. In repository settings, select **Pages → Source → GitHub Actions** before using it. No deployment or npm publication is performed by the local build.
 
-## Assumptions and warnings
+## FAQ and limitations
+
+### Does it fetch market data or save inputs?
+
+No. Supply your own prices, rents and rates. The browser keeps inputs only in memory until reload; the library makes no network calls.
+
+### Why does the npm badge show no version?
+
+The registry badge becomes available after the first npm publication. The source checkout works before publication; see [Quick start](#quick-start).
+
+### Which assumptions affect the results?
 
 **This is not legal, tax or financial advice.** Results are planning estimates, not offers, valuations or guaranteed returns. Verify inputs and applicable rules with qualified professionals.
 
@@ -150,15 +175,19 @@ Follow the [official-source verification and rate update checklist](docs/rates-u
 - [Ministry of Trade regulation, Article 20](https://eskisehir.ticaret.gov.tr/data/64edb08513b876171c69c106/TA%C5%9EINMAZ%20T%C4%B0CARET%C4%B0%20HAKKINDA%20Y%C3%96NETMEL%C4%B0K%20.pdf): total brokerage ceiling and allocation.
 - [GİB VAT rate reference](https://cdn.gib.gov.tr/api/gibportal-file/file/getFileResources?objectKey=arsiv%2Fyardim-kaynaklar%2Fyararli-bilgiler%2Fkdv-oranlari.pdf): general VAT rate, Decision 7346, effective 2023-07-10. Confirm applicability to the service.
 
-## Development and contributions
+## Contributing
 
 ```sh
 npm run check          # strict types, ESLint, Vitest + coverage, both builds, secret scan
 npm run test:smoke     # compiled package tests and runnable examples
 ```
 
-Vitest checks hand-calculated examples, every public function's invalid inputs, rounding, boundaries, schedule reconciliation and the bilingual DOM interface. Coverage is written to `coverage/` (HTML and LCOV); enforced library thresholds: 95% lines/statements, 100% functions, 90% branches. The [CI workflow](.github/workflows/ci.yml) tests Ubuntu with Node 20, 22 and 24 and Windows with Node 22. The CI badge shows the live workflow status.
+`npm test` prints coverage as well as test results. Vitest checks hand-calculated examples, every public function's invalid inputs, rounding, boundaries, schedule reconciliation and the bilingual DOM interface. Coverage is written to `coverage/` (HTML and LCOV); enforced library thresholds: 95% lines/statements, 100% functions, 90% branches. The [CI workflow](.github/workflows/ci.yml) tests Ubuntu with Node 20, 22 and 24 and Windows with Node 22 and 24, prints coverage and uploads the reports. The CI badge shows the live workflow status.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow, privacy rules and pre-commit secret scan, and [CHANGELOG.md](CHANGELOG.md) for release notes. The MIT license is in [LICENSE](LICENSE).
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow, privacy rules and pre-commit secret scan, and [CHANGELOG.md](CHANGELOG.md) for release notes.
 
 Read the [private security reporting policy](SECURITY.md) and [code of conduct](CODE_OF_CONDUCT.md). Release steps are in the “Releasing” section of CONTRIBUTING.md.
+
+## License
+
+Released under the [MIT license](LICENSE).

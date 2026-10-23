@@ -1,17 +1,34 @@
 # emlak-hesap
 
-[![CI](https://github.com/YusufBeratZengin/emlak-hesap/actions/workflows/ci.yml/badge.svg)](https://github.com/YusufBeratZengin/emlak-hesap/actions/workflows/ci.yml) [![npm](https://img.shields.io/npm/v/emlak-hesap)](https://www.npmjs.com/package/emlak-hesap) [![MIT](https://img.shields.io/github/license/YusufBeratZengin/emlak-hesap)](LICENSE) [![Node.js](https://img.shields.io/node/v/emlak-hesap)](package.json) [![Runtime dependencies](https://img.shields.io/badge/runtime%20dependencies-0-brightgreen)](package.json)
+[![CI](https://github.com/YusufBeratZengin/emlak-hesap/actions/workflows/ci.yml/badge.svg)](https://github.com/YusufBeratZengin/emlak-hesap/actions/workflows/ci.yml) [![npm](https://img.shields.io/npm/v/emlak-hesap)](https://www.npmjs.com/package/emlak-hesap) [![MIT](https://img.shields.io/github/license/YusufBeratZengin/emlak-hesap)](LICENSE) [![Node.js 20+](https://img.shields.io/badge/node-%3E%3D20-417e38)](package.json) [![Runtime dependencies](https://img.shields.io/badge/runtime%20dependencies-0-brightgreen)](package.json)
 
 [English](README.md) · Türkçe · ESM · Node.js 20+
 
 Türkiye'de konut yatırımı ve alım giderleri için TypeScript kütüphanesi ve Türkçe/İngilizce tarayıcı hesaplayıcısı.
-Tam sayı kuruşla hesap yapar; tarihli referans oranları açıkça seçilir, çalışma zamanı bağımlılığı yoktur.
-[Canlı demo](https://yusufberatzengin.github.io/emlak-hesap/) · İlk npm yayını sonrasında kurulum: `npm install emlak-hesap`.
-Yerel kopyada deneyin: `npm run build && node examples/rental-yield.mjs`.
+
+![Hayalî kuruş tutarlarıyla kira getirisi örneğini ve gerçek JSON çıktısını gösteren terminal](docs/demo.svg)
+
+## Neden emlak-hesap?
+
+- **İzlenebilir para hesabı:** tam sayı kuruş, açık yuvarlama kuralları ve ödeme tablosuyla tutarlı gider dökümü.
+- **Açık varsayımlar:** saf ve tipli fonksiyonlar, doğrudan girilen ücretler ve isteğe bağlı tarihli referans oranları.
+- **Yerel kullanım:** çalışma zamanı bağımlılığı ve ağ çağrısı yok; Türkçe/İngilizce hesaplayıcı girdileri yalnızca bellekte tutar.
+
+## Hızlı başlangıç
+
+Node.js 20+ ve npm kuruluysa, deponun yerel kopyasında çalıştırın:
+
+```sh
+npm ci --ignore-scripts
+npm run build
+node examples/rental-yield.mjs
+```
+
+Son komut yukarıdaki JSON çıktısını üretir: `grossYield: 0.06` (%6) ve `netYield: 0.0522` (%5,22). Üç örneği de çalıştırmak için `npm run examples` kullanın. Görseli gerçek konsol çıktısından yeniden üretmek için `npm run demo` çalıştırın; CI görselin güncel kaldığını denetler.
 
 ## Demo
 
-Yedi hesaplama sekmesini [tarayıcıda deneyin](https://yusufberatzengin.github.io/emlak-hesap/). Veriler yalnızca bellekte tutulur. Demo, deponun GitHub Pages yayını etkin olduğunda erişilebilir.
+Yedi hesaplama sekmesini [tarayıcıda deneyin](https://YusufBeratZengin.github.io/emlak-hesap/). Veriler yalnızca bellekte tutulur. Demo, deponun GitHub Pages yayını etkin olduğunda erişilebilir.
 
 ### Örnek çıktı
 
@@ -42,21 +59,15 @@ Yedi hesaplama sekmesini [tarayıcıda deneyin](https://yusufberatzengin.github.
 npm install emlak-hesap
 ```
 
-İlk yayın tamamlanmadan npm sürüm rozeti ve paket kurulumu kullanılamayabilir. Kaynaktan çalışmak için depoyu indirin, ardından:
-
-```sh
-npm ci --ignore-scripts
-npm run build
-npm run examples
-```
+İlk yayın tamamlanmadan npm sürüm rozeti ve paket kurulumu kullanılamayabilir. O zamana kadar [Hızlı başlangıç](#hızlı-başlangıç) bölümündeki komutlarla yerel kopyayı kullanın.
 
 Paket ESM biçimindedir ve Node.js 20+ gerektirir. Çalışma zamanı bağımlılığı yoktur. Kütüphane ve hesaplayıcı ağ çağrısı yapmaz; analitik, uzaktan yüklenen yazı tipi veya kaydedilen mali girdi içermez. Kaynak bağlantıları yalnızca tıklandığında açılır.
 
-## Örnekler
+## Kullanım örnekleri
 
 Derlenmiş paket içe aktarımlarını kullanan [kira getirisi](examples/rental-yield.mjs), [kredi](examples/mortgage.mjs) ve [alım gideri](examples/purchase-cost.mjs) örneklerini `npm run examples` ile çalıştırın. Tümü hayalî girdilerle her çalıştırmada aynı çıktıyı üretir ve `npm run test:smoke` kapsamındadır.
 
-## Hızlı örnek
+### Kütüphane örneği
 
 ```ts
 import { grossRentalYield, mortgage, purchaseCost } from 'emlak-hesap';
@@ -108,6 +119,10 @@ Her fonksiyon saftır, tek nesne alır, kalem kalem döküm içeren nesne dönd�
 
 [Kaynak kod ve dışa aktarılan tipler](src/index.ts) ile [hesabı açıklanan sayısal testlere](tests/calculations.test.ts) bakabilirsiniz. Kredi tablosunda dönem başı borç, taksit, anapara, faiz, BSMV, KKDF ve dönem sonu borç kuruş cinsinden yer alır.
 
+## Yapılandırma
+
+Ortam değişkeni, kimlik bilgisi veya yapılandırma dosyası gerekmez. Tutarları ve oranları her fonksiyona doğrudan verin. İsteğe bağlı `tr2026` referans seti ayrı içe aktarılır, kendiliğinden uygulanmaz; alanlarını senaryonuza göre değiştirin. Tarayıcıda dil ve temayı seçip form girdilerini düzenleyebilirsiniz.
+
 ### Para ve girdi doğrulama
 
 - Tutarları sıfır veya pozitif güvenli tam sayı kuruş olarak verin; ondalıklı TL tutarlarını önceden dönüştürün. Fiyat, kredi, yatırım, harç matrahı, alan ve bölge ortalaması sıfırdan büyük olmalıdır.
@@ -129,7 +144,17 @@ Framework kullanmayan arayüzde tüm hesapları kapsayan yedi sekme, Türkçe/İ
 
 [Pages iş akışı](.github/workflows/pages.yml) **yalnızca `main` dalına push olduğunda** çalışır; önce kontrolleri yapar, sonra `web/dist` içeriğini yayımlar. Kullanmak için depo ayarlarında **Pages → Source → GitHub Actions** seçilmelidir. Yerel derleme web sitesini veya npm paketini yayımlamaz.
 
-## Varsayımlar ve uyarılar
+## Sık sorulan sorular ve sınırlar
+
+### Piyasa verisi alır mı, girdileri kaydeder mi?
+
+Hayır. Fiyat, kira ve oranları siz sağlarsınız. Tarayıcı girdileri yalnızca sayfa yenilenene kadar bellekte tutar; kütüphane ağ çağrısı yapmaz.
+
+### npm rozetinde neden sürüm görünmüyor?
+
+Sürüm rozeti ilk npm yayınından sonra kullanılabilir. Kaynak kod yayın öncesinde de çalışır; [Hızlı başlangıç](#hızlı-başlangıç) bölümüne bakın.
+
+### Sonuçları hangi varsayımlar etkiler?
 
 **Hukuki, vergisel veya mali tavsiye değildir.** Sonuçlar planlama tahminidir; teklif, değerleme veya getiri garantisi sayılmaz. Girdileri ve geçerli kuralları yetkin uzmanlarla doğrulayın.
 
@@ -150,15 +175,19 @@ Framework kullanmayan arayüzde tüm hesapları kapsayan yedi sekme, Türkçe/İ
 - [Ticaret Bakanlığı yönetmeliği, madde 20](https://eskisehir.ticaret.gov.tr/data/64edb08513b876171c69c106/TA%C5%9EINMAZ%20T%C4%B0CARET%C4%B0%20HAKKINDA%20Y%C3%96NETMEL%C4%B0K%20.pdf): toplam hizmet bedeli üst sınırı ve paylaşımı.
 - [GİB KDV oranları](https://cdn.gib.gov.tr/api/gibportal-file/file/getFileResources?objectKey=arsiv%2Fyardim-kaynaklar%2Fyararli-bilgiler%2Fkdv-oranlari.pdf): genel KDV oranı, 10.07.2023'te yürürlüğe giren 7346 sayılı Karar. Hizmete uygulanabilirliğini doğrulayın.
 
-## Geliştirme ve katkı
+## Katkıda bulunma
 
 ```sh
 npm run check          # strict tip kontrolü, ESLint, Vitest + kapsama, iki derleme, sır taraması
 npm run test:smoke     # derlenmiş paket testleri ve çalıştırılabilir örnekler
 ```
 
-Vitest testleri elle hesabı açıklanan örnekleri, her fonksiyonun geçersiz girdilerini, yuvarlamayı, sınırları, ödeme tablosunun tutarlılığını ve iki dilli DOM arayüzünü kapsar. Kapsama raporu HTML ve LCOV olarak `coverage/` altına yazılır. Kütüphane eşikleri: satır/ifade %95, fonksiyon %100, dal %90. [CI iş akışı](.github/workflows/ci.yml) Ubuntu’da Node 20, 22 ve 24, Windows’ta Node 22 üzerinde çalışır. CI rozeti güncel iş akışı durumunu gösterir.
+`npm test`, test sonuçlarıyla birlikte kapsamayı da gösterir. Vitest testleri elle hesabı açıklanan örnekleri, her fonksiyonun geçersiz girdilerini, yuvarlamayı, sınırları, ödeme tablosunun tutarlılığını ve iki dilli DOM arayüzünü kapsar. Kapsama raporu HTML ve LCOV olarak `coverage/` altına yazılır. Kütüphane eşikleri: satır/ifade %95, fonksiyon %100, dal %90. [CI iş akışı](.github/workflows/ci.yml) Ubuntu’da Node 20, 22 ve 24, Windows’ta Node 22 ve 24 üzerinde çalışır; kapsamayı gösterir ve raporları saklar. CI rozeti güncel iş akışı durumunu gösterir.
 
-İş akışı, gizlilik kuralları ve commit öncesi sır taraması için [CONTRIBUTING.md](CONTRIBUTING.md), sürüm notları için [CHANGELOG.md](CHANGELOG.md) dosyasına bakın. MIT lisansı [LICENSE](LICENSE) içindedir.
+İş akışı, gizlilik kuralları ve commit öncesi sır taraması için [CONTRIBUTING.md](CONTRIBUTING.md), sürüm notları için [CHANGELOG.md](CHANGELOG.md) dosyasına bakın.
 
 Güvenlik açıkları için [özel bildirim politikasını](SECURITY.md), topluluk katılımı için [davranış kurallarını](CODE_OF_CONDUCT.md) okuyun. Yayın süreci CONTRIBUTING.md dosyasındaki “Releasing” bölümündedir.
+
+## Lisans
+
+[MIT lisansı](LICENSE) ile sunulur.

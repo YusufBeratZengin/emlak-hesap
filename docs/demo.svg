@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="502" viewBox="0 0 760 502" role="img" aria-labelledby="title description">
+  <title id="title">emlak-hesap terminal demo</title>
+  <desc id="description">Real output of node examples/rental-yield.mjs, using fictional amounts in integer kurus. The full text is also in the README.</desc>
+  <rect x="1" y="1" width="758" height="500" rx="16" fill="#0d1526" stroke="#334155"/>
+  <path d="M17 1H743Q759 1 759 17V56H1V17Q1 1 17 1Z" fill="#1e293b"/>
+  <circle cx="28" cy="28" r="6" fill="#fb7185"/>
+  <circle cx="50" cy="28" r="6" fill="#fbbf24"/>
+  <circle cx="72" cy="28" r="6" fill="#34d399"/>
+  <g font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="16">
+    <text x="732" y="34" text-anchor="end" fill="#cbd5e1">emlak-hesap · fictional scenario · kurus</text>
+  </g>
+  <g font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="16" xml:space="preserve">
+    <text x="32" y="100" fill="#a7f3d0">$ node examples/rental-yield.mjs</text>
+    <text x="32" y="126" fill="#dbe4f0">{</text>
+    <text x="32" y="152" fill="#dbe4f0">  &quot;propertyPriceKurus&quot;: 100000000,</text>
+    <text x="32" y="178" fill="#dbe4f0">  &quot;annualRentKurus&quot;: 6000000,</text>
+    <text x="32" y="204" fill="#dbe4f0">  &quot;grossYield&quot;: 0.06,</text>
+    <text x="32" y="230" fill="#dbe4f0">  &quot;vacancyLossKurus&quot;: 600000,</text>
+    <text x="32" y="256" fill="#dbe4f0">  &quot;collectedRentKurus&quot;: 5400000,</text>
+    <text x="32" y="282" fill="#dbe4f0">  &quot;annualDuesKurus&quot;: 120000,</text>
+    <text x="32" y="308" fill="#dbe4f0">  &quot;annualPropertyTaxKurus&quot;: 20000,</text>
+    <text x="32" y="334" fill="#dbe4f0">  &quot;annualMaintenanceKurus&quot;: 30000,</text>
+    <text x="32" y="360" fill="#dbe4f0">  &quot;annualInsuranceKurus&quot;: 10000,</text>
+    <text x="32" y="386" fill="#dbe4f0">  &quot;annualExpensesKurus&quot;: 180000,</text>
+    <text x="32" y="412" fill="#dbe4f0">  &quot;netAnnualIncomeKurus&quot;: 5220000,</text>
+    <text x="32" y="438" fill="#dbe4f0">  &quot;netYield&quot;: 0.0522</text>
+    <text x="32" y="464" fill="#dbe4f0">}</text>
+  </g>
+</svg>
