@@ -38,7 +38,7 @@ jobs:
       - name: Verify generated terminal demo
         run: node examples/rental-yield.mjs | node scripts/make-demo.mjs --check
       - run: npm pack --dry-run --ignore-scripts
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: coverage-${{ matrix.os }}-node-${{ matrix.node }}
